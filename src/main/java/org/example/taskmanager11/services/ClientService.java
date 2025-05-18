@@ -26,6 +26,18 @@ public class ClientService {
         clientRepository.save(client);
     }
 
+    @Transactional
+    public void updateClient(String login, String salt, String password) {
+        Client client = clientRepository.findByLogin(login);
+        if (client == null) {
+            throw new RuntimeException("Client not found: " + login);
+        }
+        client.setSalt(salt);
+        client.setPassword(password);
+        clientRepository.save(client);
+    }
+
+
     @Transactional(readOnly = true)
     public boolean checkClient(String login, String password) {
         Client client = clientRepository.findByLogin(login);
